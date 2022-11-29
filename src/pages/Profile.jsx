@@ -22,6 +22,7 @@ function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     fetch("http://localhost:3000/user/profile", {
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -29,7 +30,6 @@ function Profile() {
       },
     })
       .then((data) => {
-        setLoading(true);
         if (data.status === 401) return navigate("/login");
         return data.json();
       })

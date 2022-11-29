@@ -7,17 +7,16 @@ import { useNavigate } from "react-router-dom";
 function Groups() {
   const userContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const { access_token } = userContext;
-  const [allEnsembles, setAllEnsembles] = useState("");
-  const [ensemble, setEnsemble] = useState(0);
-  const [user, setUser] = useState("");
 
-  const handleSetEnsembles = async (ensemble) => {
-    const updatedEnsemble = allEnsembles.map((ens) => {
-      return ens._id === ensemble._id ? { ...ens, ensemble } : ens;
-    });
-    setAllEnsembles(updatedEnsemble);
-  };
+  const { access_token } = userContext;
+
+  const [allEnsembles, setAllEnsembles] = useState("");
+  const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getEnsembles();
+  }, []);
 
   useEffect(() => {
     fetch("http://localhost:3000/user/profile", {
@@ -35,22 +34,15 @@ function Groups() {
       });
   }, []);
 
-  useEffect(() => {
-    getEnsembles();
-  }, []);
-
   const getEnsembles = async () => {
-    await fetch("http://localhost:3000/ensemble/getAll", {
+    const response = await fetch("http://localhost:3000/ensemble/getAll", {
       headers: {
         Authorization: `Bearer ${access_token}`,
         "Content-type": "application/json",
       },
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setAllEnsembles(data);
-      })
-      .finally(() => {});
+    });
+    const data = await response.json();
+    setAllEnsembles(data);
   };
 
   const isCreatedByMe = (ensemble, currentUser) => {
@@ -60,15 +52,16 @@ function Groups() {
 
   const alreadyMember = (ensemble, currentUser) => {
     if (!ensemble) return;
+
     const member = ensemble.members.find(
       (member) => member === currentUser._id
     );
-
     return Boolean(member);
   };
 
   const populate = () => {
     if (!allEnsembles) return;
+
     return allEnsembles.map((e, ix) => {
       return (
         <Ensemble
@@ -86,7 +79,7 @@ function Groups() {
   };
   return (
     <GroupsPage>
-      <Div>{populate()}</Div>
+      <Div>{loading ? <div>...loading</div> : populate()}</Div>
     </GroupsPage>
   );
 }
@@ -95,6 +88,7 @@ export default Groups;
 
 const GroupsPage = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: row;
   width: 100%;
   min-height: 100vh;

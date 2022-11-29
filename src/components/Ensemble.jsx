@@ -16,9 +16,10 @@ function Ensemble(props) {
   } = props;
 
   const [loading, setLoading] = useState(false);
+
   const handleJoinEnsemble = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:3000/ensemble/addMember", {
+    await fetch("http://localhost:3000/ensemble/addMember", {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -26,8 +27,6 @@ function Ensemble(props) {
       },
       body: JSON.stringify({ ensembleId: ensemble._id, userId: user._id }),
     });
-    const data = await response.json();
-    await setAllEnsembles(data);
     await getAllEnsembles();
     setLoading(false);
   };
@@ -56,7 +55,7 @@ function Ensemble(props) {
       {!createdByMe && !alreadyMember && (
         <PrimaryButton
           loading={loading}
-          text="Hello Mom"
+          text="Register to group"
           onClick={handleJoinEnsemble}
         />
       )}
