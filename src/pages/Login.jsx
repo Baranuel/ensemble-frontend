@@ -19,23 +19,20 @@ function Login() {
   const sendData = async (e) => {
     e.preventDefault();
 
-    await fetch("http://localhost:3000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginForm),
-    })
-      .then((response) => {
-        setLoading(true);
-        return response.json();
-      })
-      .then((data) => {
-        userContext.login(data.access_token);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginForm),
       });
+      const data = await response.json();
+      userContext.login(data.access_token);
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
