@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
+/*Rest style*/
+
+
+ *{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+ }
+
+body{
+  width: 100%;
+  overflow: hidden-y;
+}
+
+
+.card {
+  padding: 2em;
+}
+
+/* Sign up form */
+.signup-form {
+  border-radius: 8px;
+  padding: 2em 3em;
+  background-color: #f3f3f3;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+
+input{ 
+  padding:0.65rem 0;
+  font-size:1.2rem;
+  width:100%;
+  border-radius:10px;
+}
+
+
+h2 {
+  color: #353a5d;
+  font-size: xx-large;
+}
+
+label {
+  color: #353a5d;
+  font-weight: 500;
+  font-size: medium;
+}
+
+.signup-button {
+  width: 25em;
+  background-color: #353a5d;
+  text-align: center;
+  color: #fff;
+}
+
+.signup-button:hover {
+  background-color: #353a5d80;
+  cursor: pointer;
+}
