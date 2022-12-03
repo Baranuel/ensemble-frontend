@@ -5,45 +5,21 @@ import PageBreak from "../components/PageBreak";
 import PrimaryButton from "../components/PrimaryButton";
 import { AuthContext } from "../context/AuthContextProvider";
 import Ensemble from "../components/Ensemble";
-import { useNavigate } from "react-router-dom";
+import useGetUser from "../hooks/useGetUser";
+import useGetCreatedEnsembles from "../hooks/useGetCreatedEnsembles";
+import CreateEnsembleForm from "../components/CreateEnsembleForm";
 
 function Profile() {
-  const [user, setUser] = useState(undefined);
-  const [ensembles, setEnsembles] = useState(undefined);
-  const [member, setMember] = useState(undefined);
-  const [errors, setErrors] = useState(undefined);
+  const { user } = useGetUser();
+  const { createdEnsembles, setCreatedEnsembles } = useGetCreatedEnsembles();
 
-  const [ensembleFromVisible, setEnsembleFormVisible] = useState();
+  const [errors, setErrors] = useState(undefined);
+  const [visible, setVisible] = useState();
   const [createEnsembleData, setCreateEnsembleData] = useState();
 
   const userContext = useContext(AuthContext);
 
-  const { access_token, loading, setLoading } = userContext;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setLoading(true);
-    fetch("http://localhost:3000/user/profile", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-type": "application/json",
-      },
-    })
-      .then((data) => {
-        if (data.status === 401) return navigate("/login");
-        return data.json();
-      })
-      .then((data) => {
-        setUser(data.user);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  const handleCreateEnsemble = () => {
-    setEnsembleFormVisible(true);
-  };
+  const { access_token, loading } = userContext;
 
   const createEnsemble = async (e) => {
     e.preventDefault();
@@ -58,10 +34,15 @@ function Profile() {
       });
 
       const data = await response.json();
+
+      //checking if we get an error and if so we set it in the local state so we can show it.
       if (data.error) return setErrors(data.message);
       if (data.statusCode === 400) return setErrors([data.message]);
-      setEnsembles((prev) => [...prev, data]);
-      setEnsembleFormVisible(false);
+
+      setCreatedEnsembles((prev) => [...prev, data]);
+      setVisible(false);
+
+      //setting the state to nothing so we clean everything that was in the state before
       setErrors();
       setCreateEnsembleData();
     } catch (err) {
@@ -76,62 +57,11 @@ function Profile() {
     }));
   };
 
-  useEffect(() => {
-    setLoading(true);
-    fetch("http://localhost:3000/ensemble/createdEnsembles", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-type": "application/json",
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setEnsembles(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [setEnsembles]);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/ensemble/userIsMember", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-type": "application/json",
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setMember(data));
-  }, []);
-
-  const isCreatedByMe = (ensemble, currentUser) => {
-    if (!ensemble) return;
-    return ensemble.creator === currentUser._id;
-  };
-
-  const alreadyMember = (ensemble, currentUser) => {
-    if (!ensemble) return;
-    const member = ensemble.members.find(
-      (member) => member === currentUser._id
-    );
-
-    return Boolean(member);
-  };
-
   const populate = () => {
-    if (!ensembles) return;
+    if (!createdEnsembles) return;
 
-    return ensembles.map((e, ix) => {
-      return (
-        <Ensemble
-          key={ix + "key"}
-          createdByMe={isCreatedByMe(e, user)}
-          ensemble={e}
-          access_token={access_token}
-          user={user}
-          alreadyMember={alreadyMember(e, user)}
-        />
-      );
+    return createdEnsembles.map((e, ix) => {
+      return <Ensemble key={ix + "key"} ensemble={e} user={user} />;
     });
   };
 
@@ -166,43 +96,26 @@ function Profile() {
       <PageBreak />
 
       <GroupsDiv>
-        <PrimaryButton onClick={handleCreateEnsemble} text="create ensemble" />
-        {ensembleFromVisible && (
-          <Form onSubmit={createEnsemble} method="POST">
-            <Close>
-              <h3 onClick={() => setEnsembleFormVisible(false)}>X</h3>
-            </Close>
-            <h2>Log in</h2>
-            <label htmlFor="">Title</label>
-            <br />
-            <input name="title" onChange={handleChange} type="text" />
-            <br />
-            <label htmlFor="">Genre </label>
-            <br />
-            <input name="genre" onChange={handleChange} type="text" />
-            <br />
-            <label htmlFor="">Location </label>
-            <br />
-            <input name="location" onChange={handleChange} type="text" />
-            <br />
-            <label htmlFor="instruments">Instruments </label>
-            <br />
-            <input name="instruments" onChange={handleChange} type="text" />
-            <br />
-
-            {errors && (
-              <Errors>
-                {errors?.map((err, ix) => (
-                  <p key={ix}>{err}</p>
-                ))}
-              </Errors>
-            )}
-            <ButtonCss text="Create" />
-          </Form>
+        <PrimaryButton
+          onClick={() => setVisible(true)}
+          text="create ensemble"
+        />
+        {visible && (
+          <CreateEnsembleForm
+            createEnsemble={createEnsemble}
+            setVisible={setVisible}
+            onChange={handleChange}
+            errors={errors}
+          />
         )}
         <CreatedGroups>
           <h2>Ensambles you have created</h2>
-          <Groups> {loading ? "loading..." : populate()}</Groups>
+          <Groups>
+            {" "}
+            {!createdEnsembles || createdEnsembles.length <= 0
+              ? "You have not created any Ensembles"
+              : populate()}
+          </Groups>
         </CreatedGroups>
       </GroupsDiv>
     </ProfilePage>
@@ -216,6 +129,12 @@ const Groups = styled.div`
   width: 100%;
   flex-wrap: wrap;
 `;
+
+const ButtonCss = styled(Button)`
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+`;
+
 const CreatedGroups = styled.div`
   display: flex;
   flex-direction: column;
@@ -224,15 +143,6 @@ const CreatedGroups = styled.div`
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
-`;
-
-const Errors = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  background: pink;
-  border-radius: 10px;
-  color: red;
 `;
 
 const ProfilePage = styled.div`
@@ -255,10 +165,6 @@ const ProfileBox = styled.div`
   flex-direction: column;
   height: 75%;
 `;
-const ButtonCss = styled(Button)`
-  padding: 1rem 3rem;
-  font-size: 1.5rem;
-`;
 
 const Icon = styled.div`
   height: 120px;
@@ -268,31 +174,6 @@ const Icon = styled.div`
   border: 5px solid white;
   box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
   background: grey;
-`;
-
-const Form = styled.form`
-  width: 40%;
-  padding: 4rem;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
-  background: white;
-  position: fixed;
-  top: 5%;
-  right: 30%;
-  h2 {
-    margin-bottom: 2rem;
-  }
-`;
-
-const Close = styled.div`
-  display: flex;
-  justify-content: flex-end;
-
-  h3 {
-    cursor: pointer;
-  }
 `;
 
 const ProfileInformation = styled.div`
