@@ -31,13 +31,11 @@ function Register() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.statusCode !== 201) return setErrors(data.message);
-        console.log(data);
         setErrors(false);
-        login(data.access_token);
-        navigate("/profile");
+        return login(data.access_token);
       })
+      .then(() => navigate("/profile"))
       .catch((error) => {
         console.error("Error:", error);
       });

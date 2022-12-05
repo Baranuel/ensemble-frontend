@@ -28,7 +28,7 @@ function Login() {
         body: JSON.stringify(loginForm),
       });
       const data = await response.json();
-      userContext.login(data.access_token);
+      await userContext.login(data.access_token);
       navigate("/profile");
     } catch (error) {
       console.error("Error:", error);

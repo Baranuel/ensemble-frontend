@@ -11,8 +11,8 @@ import CreateEnsembleForm from "../components/CreateEnsembleForm";
 
 function Profile() {
   const { user } = useGetUser();
+  console.log(user);
   const { createdEnsembles, setCreatedEnsembles } = useGetCreatedEnsembles();
-
   const [errors, setErrors] = useState(undefined);
   const [visible, setVisible] = useState();
   const [createEnsembleData, setCreateEnsembleData] = useState();
@@ -72,7 +72,7 @@ function Profile() {
           <ProfileInformation>
             <Icon>icon</Icon>
             <User>
-              <Name>{loading ? "Loading..." : user?.firstName}</Name>
+              <Name>{!user ? "Loading..." : user.firstName}</Name>
               <Description>
                 <p>info about the personsadsadad</p>
                 <p>info about the person</p>

@@ -4,9 +4,8 @@ import { AuthContext } from "../context/AuthContextProvider";
 async function useGetEnsembles() {
   const userContext = useContext(AuthContext);
   const { access_token } = userContext;
+  const [ensembles, setEnsembles] = useState([]);
 
-  const [allEnsembles, setAllEnsembles] = useState([]);
-  console.log(allEnsembles);
   useEffect(() => {
     fetch("http://localhost:3000/ensemble/getAll", {
       headers: {
@@ -16,11 +15,11 @@ async function useGetEnsembles() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setAllEnsembles(data);
+        setEnsembles(data);
       });
   }, []);
 
-  return { allEnsembles };
+  return { ensembles, setEnsembles };
 }
 
 export default useGetEnsembles;

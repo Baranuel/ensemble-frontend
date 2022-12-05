@@ -5,9 +5,10 @@ import { User } from "@styled-icons/boxicons-solid/User";
 import { LocationDot } from "@styled-icons/fa-solid/LocationDot";
 import { Guitar } from "@styled-icons/fluentui-system-filled/Guitar";
 import { AuthContext } from "../context/AuthContextProvider";
+import useGetAllEnsembles from "../hooks/useGetAllEnsembles";
 
 function Ensemble(props) {
-  const { ensemble, user } = props;
+  const { ensemble, user, refetch } = props;
   const userContext = useContext(AuthContext);
   const { access_token } = userContext;
 
@@ -23,6 +24,9 @@ function Ensemble(props) {
       },
       body: JSON.stringify({ ensembleId: ensemble._id, userId: user._id }),
     });
+    const data = await response.json();
+    console.log(data);
+    await refetch();
     setLoading(false);
   };
 
@@ -60,7 +64,7 @@ function Ensemble(props) {
             <h4>Members:</h4>
             {ensemble.members.map((member, ix) => (
               <li style={{ listStyleType: "none" }} key={ix}>
-                {member.firstName}
+                <p> {member.firstName} </p>
               </li>
             ))}
           </IconKey>
@@ -144,6 +148,10 @@ const IconKey = styled.div`
   }
 
   svg {
+    margin-right: 0.25rem;
+  }
+
+  li p {
     margin-right: 0.25rem;
   }
 `;
