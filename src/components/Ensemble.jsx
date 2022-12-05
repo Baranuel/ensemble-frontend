@@ -5,7 +5,9 @@ import { User } from "@styled-icons/boxicons-solid/User";
 import { LocationDot } from "@styled-icons/fa-solid/LocationDot";
 import { Guitar } from "@styled-icons/fluentui-system-filled/Guitar";
 import { AuthContext } from "../context/AuthContextProvider";
-import useGetAllEnsembles from "../hooks/useGetAllEnsembles";
+import { Check2 } from "@styled-icons/bootstrap/Check2";
+import { Admin } from "@styled-icons/remix-fill/Admin";
+import JazzIcon from "../assets/icons8-jazz.svg";
 
 function Ensemble(props) {
   const { ensemble, user, refetch } = props;
@@ -25,7 +27,6 @@ function Ensemble(props) {
       body: JSON.stringify({ ensembleId: ensemble._id, userId: user._id }),
     });
     const data = await response.json();
-    console.log(data);
     await refetch();
     setLoading(false);
   };
@@ -40,14 +41,41 @@ function Ensemble(props) {
     return ensemble.creator._id === user._id ? true : false;
   };
 
+  const showMemberNames = () => {
+    const numberOfMembers = ensemble.members.length;
+    const shortenedArrayOfMembers = ensemble.members.slice(0, 4);
+
+    switch (true) {
+      case numberOfMembers < 4:
+        return ensemble.members.map((member, index) => {
+          return (
+            <li key={index}>
+              <p> {member.firstName}</p>
+            </li>
+          );
+        });
+
+      case numberOfMembers > 4:
+        return (
+          <li>
+            {shortenedArrayOfMembers.map((member, index) => (
+              <p key={index}> {member.firstName}</p>
+            ))}
+            <SpanCss>...</SpanCss>
+          </li>
+        );
+    }
+  };
+
   return (
     <EnsembleCard>
+      <JazzIconCss src={JazzIcon} />
       <Wrapper>
         <Heading>{ensemble.title} </Heading>
         <Genre>{ensemble.genre}</Genre>
 
         <IconKey>
-          <UserIconCss />
+          <AdminCss />
           <h4>Creator: </h4>
           {isUserCreator() ? <p>You</p> : <p>{ensemble.creator.username}</p>}
         </IconKey>
@@ -62,11 +90,7 @@ function Ensemble(props) {
           <IconKey>
             <UserIconCss />
             <h4>Members:</h4>
-            {ensemble.members.map((member, ix) => (
-              <li style={{ listStyleType: "none" }} key={ix}>
-                <p> {member.firstName} </p>
-              </li>
-            ))}
+            {showMemberNames()}
           </IconKey>
         </ul>
       </Wrapper>
@@ -84,6 +108,13 @@ function Ensemble(props) {
             text="Join Group"
           />
         )}
+        {isUserMember() && (
+          <IsMember>
+            <CheckCss />
+            Member
+          </IsMember>
+        )}
+        {isUserCreator() && <AdminCss color="white" />}
       </BottomBanner>
     </EnsembleCard>
   );
@@ -92,12 +123,22 @@ function Ensemble(props) {
 export default Ensemble;
 
 const ButtonCss = styled(GenericButton)`
-  color: #bf1e2f;
+  background-color: #bf1e2f;
   font-family: Montserrat;
   font-weight: 700;
-  background: white;
+  color: white;
 `;
 
+const SpanCss = styled.span`
+  font-weight: 700;
+`;
+
+const IsMember = styled.h3`
+  color: #56a4e8;
+  font-family: Montserrat;
+  font-size: 0.85rem;
+  font-weight: 700;
+`;
 const BottomBanner = styled.div`
   display: flex;
   width: 100%;
@@ -120,7 +161,18 @@ const Wrapper = styled.div`
   }
 `;
 
+const JazzIconCss = styled.img`
+  position: absolute;
+  opacity: 0.5;
+  right: -15%;
+  bottom: 15%;
+  height: 200px;
+  width: 200px;
+`;
+
 const EnsembleCard = styled.div`
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 450px;
@@ -152,7 +204,7 @@ const IconKey = styled.div`
   }
 
   li p {
-    margin-right: 0.25rem;
+    margin-left: 0.25rem;
   }
 `;
 
@@ -164,10 +216,22 @@ const Heading = styled.h1`
   margin-bottom: 0.25rem;
 `;
 
+const AdminCss = styled(Admin)`
+  width: 20px;
+  color: ${(p) => (p.color ? p.color : "#353a5d")};
+`;
+
 const UserIconCss = styled(User)`
   height: 20px;
   width: 20px;
   color: #353a5d;
+`;
+
+const CheckCss = styled(Check2)`
+  height: 20px;
+  width: 20px;
+  margin-right: 0.25rem;
+  color: #56a4e8;
 `;
 const GuitarCss = styled(Guitar)`
   height: 20px;

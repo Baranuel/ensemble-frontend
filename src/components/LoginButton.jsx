@@ -5,9 +5,9 @@ import styled from "styled-components";
 
 function LoginButton(props) {
   return (
-    <ButtonCss bgColor={props.bgColor}>
-      <LinkCss to={`${props.path}`}>{props.name}</LinkCss>
-    </ButtonCss>
+    <LinkCss to={`${props.path}`}>
+      <ButtonCss bgColor={props.bgColor}>{props.name}</ButtonCss>
+    </LinkCss>
   );
 }
 
@@ -15,11 +15,12 @@ export default LoginButton;
 
 const ButtonCss = styled.button`
   background-color: white;
-  margin: 0 0.5rem;
+  align-self: center;
+  min-width: 150px;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #353a5d;
 `;
 
 const LinkCss = styled(Link)`
   text-decoration: none;
-  color: #353a5d;
 `;

@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import LinkItem from "./LinkItem";
 import CreateAccButton from "./CreateAccButton";
 import LoginButton from "./LoginButton";
-
+import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContextProvider";
 function Navigation() {
+  const { access_token } = useContext(AuthContext);
+
   return (
     <StyledNavigation>
-      <Title>
-        <TitleHeading>Musik Samspil</TitleHeading>
+      <Title to="/">
+        <TitleHeading> Musik Samspil</TitleHeading>
         <TitleText>Skapt af DAOS - Dansk Amatororkester Samvirkle</TitleText>
       </Title>
 
       <Wrapper>
-        <LinkItem path="/" name="Home" />
+        <LinkItem path="/groups" name="Find Groups" />
         <LinkItem path="/profile" name="Profile" />
-        <LinkItem path="/groups" name="Groups" />
-        <CreateAccButton path="/register" name="Create Account" />
-        <LoginButton path="/login" name="Login" />
+        {!access_token && (
+          <CreateAccButton path="/register" name="Create Account" />
+        )}
+        <LoginButton path="/login" name={access_token ? "Log out" : "Log in"} />
         {/* <Link to="/profile">Profile</Link>
         <Link to="/groups">Log ind</Link> */}
       </Wrapper>
@@ -32,12 +36,13 @@ const StyledNavigation = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  padding: 0 2rem;
   box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
 `;
 
-const Title = styled.div`
+const Title = styled(Link)`
+  text-decoration: none;
   padding: 1rem;
 `;
 
@@ -55,11 +60,11 @@ const TitleText = styled.p`
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 
   * {
-    margin: 0 1.5rem;
-    font-size: 1.2rem;
+    margin: 0 1rem;
+    font-size: 1.1rem;
   }
 `;

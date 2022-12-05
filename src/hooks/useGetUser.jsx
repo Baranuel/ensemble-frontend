@@ -7,24 +7,29 @@ function useGetUser() {
   const userContext = useContext(AuthContext);
   const { access_token } = userContext;
 
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    fetch("http://localhost:3000/user/profile", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Content-type": "application/json",
-      },
-    })
-      .then((data) => {
-        if (data.status === 401) return navigate("/login");
-        return data.json();
+    try {
+      fetch("http://localhost:3000/user/profile", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-type": "application/json",
+        },
       })
-      .then((data) => {
-        setUser(data.user);
-      });
+        .then((data) => {
+          if (data.status === 401) return navigate("/login");
+          return data.json();
+        })
+        .then((data) => {
+          console.log(data);
+          setUser(data.user);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
-  return { user };
+  return { user, access_token };
 }
 
 export default useGetUser;

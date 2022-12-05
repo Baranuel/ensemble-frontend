@@ -11,7 +11,7 @@ import CreateEnsembleForm from "../components/CreateEnsembleForm";
 
 function Profile() {
   const { user } = useGetUser();
-  console.log(user);
+
   const { createdEnsembles, setCreatedEnsembles } = useGetCreatedEnsembles();
   const [errors, setErrors] = useState(undefined);
   const [visible, setVisible] = useState();
