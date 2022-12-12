@@ -124,6 +124,15 @@ function Profile() {
 
 export default Profile;
 
+const StyledDiv = styled.div`
+  background: green;
+
+  h1 {
+    background: red;
+    width: 50%;
+  }
+`;
+
 const Groups = styled.div`
   display: flex;
   width: 100%;

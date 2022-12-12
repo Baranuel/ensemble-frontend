@@ -18,10 +18,8 @@ function Navigation() {
       <Wrapper>
         <LinkItem path="/groups" name="Find Groups" />
         <LinkItem path="/profile" name="Profile" />
-        {!access_token && (
-          <CreateAccButton path="/register" name="Create Account" />
-        )}
-        <LoginButton path="/login" name={access_token ? "Log out" : "Log in"} />
+        {<CreateAccButton path="/register" name="Create Account" />}
+        <LoginButton path="/login" name="Log in" />
         {/* <Link to="/profile">Profile</Link>
         <Link to="/groups">Log ind</Link> */}
       </Wrapper>

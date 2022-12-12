@@ -10,8 +10,8 @@
  }
 
 body{
-  width: 100%;
-  overflow: hidden-y;
+  width: 100vw;
+  overflow-x: hidden;
   background-color: white;
 }
 

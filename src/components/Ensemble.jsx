@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GenericButton from "./GenericButton";
 import { User } from "@styled-icons/boxicons-solid/User";
@@ -68,59 +69,66 @@ function Ensemble(props) {
   };
 
   return (
-    <EnsembleCard>
-      <JazzIconCss src={JazzIcon} />
-      <Wrapper>
-        <Heading>{ensemble.title} </Heading>
-        <Genre>{ensemble.genre}</Genre>
+    <LinkCss to={`/group/${ensemble._id}`} replace>
+      <EnsembleCard>
+        <JazzIconCss src={JazzIcon} />
+        <Wrapper>
+          <Heading>{ensemble.title} </Heading>
+          <Genre>{ensemble.genre}</Genre>
 
-        <IconKey>
-          <AdminCss />
-          <h4>Creator: </h4>
-          {isUserCreator() ? <p>You</p> : <p>{ensemble.creator.username}</p>}
-        </IconKey>
-
-        <IconKey>
-          <GuitarCss />
-          <h4>Instruments: </h4>
-          {ensemble.instruments}
-        </IconKey>
-
-        <ul>
           <IconKey>
-            <UserIconCss />
-            <h4>Members:</h4>
-            {showMemberNames()}
+            <AdminCss />
+            <h4>Creator: </h4>
+            {isUserCreator() ? <p>You</p> : <p>{ensemble.creator.username}</p>}
           </IconKey>
-        </ul>
-      </Wrapper>
 
-      <BottomBanner>
-        <IconKey>
-          <LocationDotCss />
-          <h4>Location: </h4>
-          {ensemble.location}
-        </IconKey>
-        {!isUserCreator() && !isUserMember() && (
-          <ButtonCss
-            isLoading={loading}
-            onClick={() => handleJoinEnsemble()}
-            text="Join Group"
-          />
-        )}
-        {isUserMember() && (
-          <IsMember>
-            <CheckCss />
-            Member
-          </IsMember>
-        )}
-        {isUserCreator() && <AdminCss color="white" />}
-      </BottomBanner>
-    </EnsembleCard>
+          <IconKey>
+            <GuitarCss />
+            <h4>Instruments: </h4>
+            {ensemble.instruments}
+          </IconKey>
+
+          <ul>
+            <IconKey>
+              <UserIconCss />
+              <h4>Members:</h4>
+              {showMemberNames()}
+            </IconKey>
+          </ul>
+        </Wrapper>
+
+        <BottomBanner>
+          <IconKey>
+            <LocationDotCss />
+            <h4>Location: </h4>
+            {ensemble.location}
+          </IconKey>
+          {!isUserCreator() && !isUserMember() && (
+            <ButtonCss
+              isLoading={loading}
+              onClick={() => handleJoinEnsemble()}
+              text="Join Group"
+            />
+          )}
+          {isUserMember() && (
+            <IsMember>
+              <CheckCss />
+              Member
+            </IsMember>
+          )}
+          {isUserCreator() && <AdminCss color="white" />}
+        </BottomBanner>
+      </EnsembleCard>
+    </LinkCss>
   );
 }
 
 export default Ensemble;
+
+const LinkCss = styled(Link)`
+  text-decoration: none;
+  color: unset;
+`;
 
 const ButtonCss = styled(GenericButton)`
   background-color: #bf1e2f;

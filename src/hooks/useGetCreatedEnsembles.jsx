@@ -4,8 +4,8 @@ import { AuthContext } from "../context/AuthContextProvider";
 function useGetCreatedEnsembles() {
   const userContext = useContext(AuthContext);
   const { access_token } = userContext;
-  const [createdEnsembles, setCreatedEnsembles] = useState([]);
-
+  const [createdEnsembles, setCreatedEnsembles] = useState();
+  console.log(createdEnsembles);
   useEffect(() => {
     fetch("http://localhost:3000/ensemble/createdEnsembles", {
       headers: {

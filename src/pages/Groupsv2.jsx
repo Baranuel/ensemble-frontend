@@ -14,8 +14,6 @@ function Groupsv2() {
   const { user } = useGetUser();
   const { allEnsembles, refetchData, setAllEnsembles, isLoading } =
     useGetAllEnsembles();
-
-  console.log(isLoading);
   const populate = () => {
     if (!allEnsembles) return;
 
