@@ -40,16 +40,10 @@ function Login() {
       <FormDiv>
         <Form onSubmit={sendData} method="POST">
           <h2>Log in</h2>
-          <label htmlFor="">email</label>
-          <br />
+          <label htmlFor="">Email</label>
           <input name="email" onChange={handleChange} type="text" />
-          <br />
-          <br />
           <label htmlFor="">Password </label>
-          <br />
           <input name="password" onChange={handleChange} type="password" />
-          <br />
-          <br />
           <button className="signup-button" type="submit">
             Login
           </button>
@@ -72,6 +66,8 @@ const LoginPage = styled.div`
 
 const FormDiv = styled.div`
   display: flex;
+  flex-direction: column;
+  width: 500px;
 `;
 
 const Form = styled.form`
@@ -83,5 +79,26 @@ const Form = styled.form`
 
   h2 {
     margin-bottom: 2rem;
+  }
+
+  label {
+    color: #696969;
+  }
+
+  input {
+    background: white;
+    border: none;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+    color: black;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: bold;
   }
 `;

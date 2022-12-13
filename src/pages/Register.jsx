@@ -122,4 +122,29 @@ const Form = styled.form`
   border-radius: 10px;
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
   background: white;
+
+  h2 {
+    margin-bottom: 2rem;
+  }
+
+  label {
+    color: #696969;
+  }
+
+  input {
+    background: white;
+    border: none;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+    color: black;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: bold;
+  }
 `;
