@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import Button from "../components/Button";
+import GenericButton from "../components/GenericButton";
 import PageBreak from "../components/PageBreak";
-import PrimaryButton from "../components/PrimaryButton";
 import { AuthContext } from "../context/AuthContextProvider";
 import Ensemble from "../components/Ensemble";
 import useGetUser from "../hooks/useGetUser";
 import useGetCreatedEnsembles from "../hooks/useGetCreatedEnsembles";
 import CreateEnsembleForm from "../components/CreateEnsembleForm";
+import { Generic } from "styled-icons/crypto";
 
 function Profile() {
   const { user } = useGetUser();
@@ -70,26 +70,27 @@ function Profile() {
       <ProfileTopDiv>
         <ProfileBox>
           <ProfileInformation>
-            <Icon>icon</Icon>
+            <Icon src="https://i.pravatar.cc/300" />
             <User>
               <Name>{!user ? "Loading..." : user.firstName}</Name>
               <Description>
                 <p>info about the personsadsadad</p>
                 <p>info about the person</p>
+                <p>Ahoj {user?.firstName}</p>
               </Description>
             </User>
           </ProfileInformation>
           <ButtonDiv>
-            <ButtonCss text="Edit Profile" />
-            <ButtonCss text="Options" />
+            <ButtonCss className text="Edit Profile" />
+            <ButtonCss className text="Options" />
           </ButtonDiv>
         </ProfileBox>
 
         <DAOS>
           <SidebarHeading>Er du medlem af DAOS?</SidebarHeading>
           <p>Er di medlem eller igennme et orkester ?</p>
-          <PrimaryButton text="Jeg er Medlem" />
-          <Button text="Bliv Medlem" />
+          <PrimaryButton className text="Jeg er Medlem" />
+          <GenericButton className text="Bliv Medlem" />
         </DAOS>
       </ProfileTopDiv>
 
@@ -132,16 +133,23 @@ const StyledDiv = styled.div`
     width: 50%;
   }
 `;
-
+const PrimaryButton = styled(GenericButton)`
+  background: #353a5d;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #353a5d;
+  margin-bottom: 0.5rem;
+`;
 const Groups = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
 `;
 
-const ButtonCss = styled(Button)`
-  padding: 1rem 3rem;
-  font-size: 1.5rem;
+const ButtonCss = styled(GenericButton)`
+  font-size: 1.2rem;
+  margin-right: 1rem;
 `;
 
 const CreatedGroups = styled.div`
@@ -175,7 +183,7 @@ const ProfileBox = styled.div`
   height: 75%;
 `;
 
-const Icon = styled.div`
+const Icon = styled.img`
   height: 120px;
   width: 120px;
   margin-right: 2rem;

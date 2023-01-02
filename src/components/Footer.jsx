@@ -11,15 +11,9 @@ function Footer() {
         <FooterItems>
           <FooterNav>
             <FooterNavLinks>
-              <FooterNavLink>
-                <a href="#home">Home</a>
-              </FooterNavLink>
-              <FooterNavLink>
-                <a href="#ensambles">See ensambles</a>
-              </FooterNavLink>
-              <FooterNavLink>
-                <a href="#profile">Profile</a>
-              </FooterNavLink>
+              <FooterNavLink href="#home"> Home</FooterNavLink>
+              <FooterNavLink href="#ensambles">See ensambles</FooterNavLink>
+              <FooterNavLink href="#profile">Profile</FooterNavLink>
             </FooterNavLinks>
             <FooterSocial>
               <a href="https://www.instagram.com/daosdk/">
@@ -264,11 +258,10 @@ const FooterNavLinks = styled.div`
 const FooterNavLink = styled.a`
   margin-right: 1rem;
   font-size: 0.9rem;
-  a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-  }
+
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
 `;
 
 const FooterSocial = styled.div`

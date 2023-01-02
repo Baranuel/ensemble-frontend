@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import picture from "../assets/clip-333@3x.png";
-import Button from "../components/Button";
-import PrimaryButton from "../components/PrimaryButton";
+import GenericButton from "../components/GenericButton";
 
 function Home() {
   return (
@@ -13,8 +12,8 @@ function Home() {
             Stedet hvor amatørmusikere finder hinanden og spiller musik sammen
           </Heading>
           <ButtonDiv>
-            <Button text="Instrument" />
-            <PrimaryButton text="Find" />
+            <GenericButton text="Instrument" />
+            <PrimaryButton className text="Find" />
           </ButtonDiv>
         </TextDiv>
         <ImgDiv>
@@ -66,6 +65,14 @@ const Heading = styled.h1`
   width: 25ch;
   font-size: 2.75vw;
   color: #bf1e2e;
+`;
+
+const PrimaryButton = styled(GenericButton)`
+  background: #353a5d;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #353a5d;
 `;
 
 const ImgDiv = styled.div`

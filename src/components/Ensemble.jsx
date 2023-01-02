@@ -12,6 +12,7 @@ import JazzIcon from "../assets/icons8-jazz.svg";
 
 function Ensemble(props) {
   const { ensemble, user, refetch } = props;
+
   const userContext = useContext(AuthContext);
   const { access_token } = userContext;
 
@@ -69,8 +70,8 @@ function Ensemble(props) {
   };
 
   return (
-    <LinkCss to={`/group/${ensemble._id}`} replace>
-      <EnsembleCard>
+    <EnsembleCard>
+      <LinkCss to={`/group/${ensemble._id}`}>
         <JazzIconCss src={JazzIcon} />
         <Wrapper>
           <Heading>{ensemble.title} </Heading>
@@ -96,30 +97,30 @@ function Ensemble(props) {
             </IconKey>
           </ul>
         </Wrapper>
+      </LinkCss>
 
-        <BottomBanner>
-          <IconKey>
-            <LocationDotCss />
-            <h4>Location: </h4>
-            {ensemble.location}
-          </IconKey>
-          {!isUserCreator() && !isUserMember() && (
-            <ButtonCss
-              isLoading={loading}
-              onClick={() => handleJoinEnsemble()}
-              text="Join Group"
-            />
-          )}
-          {isUserMember() && (
-            <IsMember>
-              <CheckCss />
-              Member
-            </IsMember>
-          )}
-          {isUserCreator() && <AdminCss color="white" />}
-        </BottomBanner>
-      </EnsembleCard>
-    </LinkCss>
+      <BottomBanner>
+        <IconKey>
+          <LocationDotCss />
+          <h4>Location: </h4>
+          {ensemble.location}
+        </IconKey>
+        {!isUserCreator() && !isUserMember() && (
+          <ButtonCss
+            isLoading={loading}
+            onClick={() => handleJoinEnsemble()}
+            text="Join Group"
+          />
+        )}
+        {isUserMember() && (
+          <IsMember>
+            <CheckCss />
+            Member
+          </IsMember>
+        )}
+        {isUserCreator() && <AdminCss color="white" />}
+      </BottomBanner>
+    </EnsembleCard>
   );
 }
 

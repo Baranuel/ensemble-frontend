@@ -4,7 +4,6 @@ import { AuthContext } from "../context/AuthContextProvider";
 function useGetSpecificGroup(_id) {
   const { access_token } = useContext(AuthContext);
   const [specificEnsemble, setSpecificEnsemble] = useState();
-  console.log(specificEnsemble);
   useEffect(() => {
     GetSpecificEnsemble();
   }, []);

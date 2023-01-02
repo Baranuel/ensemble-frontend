@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import LinkItem from "./LinkItem";
-import CreateAccButton from "./CreateAccButton";
-import LoginButton from "./LoginButton";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContextProvider";
+import GenericButton from "./GenericButton";
 function Navigation() {
   const { access_token } = useContext(AuthContext);
 
@@ -18,8 +17,8 @@ function Navigation() {
       <Wrapper>
         <LinkItem path="/groups" name="Find Groups" />
         <LinkItem path="/profile" name="Profile" />
-        {<CreateAccButton path="/register" name="Create Account" />}
-        <LoginButton path="/login" name="Log in" />
+        {<CreateAccButton className path="/register" name="Create Account" />}
+        <LoginButton className path="/login" name="Log in" />
         {/* <Link to="/profile">Profile</Link>
         <Link to="/groups">Log ind</Link> */}
       </Wrapper>
@@ -37,6 +36,21 @@ const StyledNavigation = styled.nav`
   padding: 0 2rem;
   box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
   background-color: white;
+`;
+
+const CreateAccButton = styled(LinkItem)`
+  background: #353a5d;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #353a5d;
+`;
+
+const LoginButton = styled(LinkItem)`
+  color: #353a5d;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #353a5d;
 `;
 
 const Title = styled(Link)`

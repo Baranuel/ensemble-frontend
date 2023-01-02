@@ -8,7 +8,6 @@ import GenericButton from "../components/GenericButton";
 function Group() {
   const { _id } = useParams();
   const { specificEnsemble } = useGetSpecificGroup(_id);
-  console.log(specificEnsemble);
 
   return (
     <GroupPage>

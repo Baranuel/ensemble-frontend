@@ -1,6 +1,6 @@
 import React from "react";
 import Spinner from "./Spinner";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 function GenericButton(props) {
   const { isLoading, onClick, text, className } = props;
@@ -31,7 +31,18 @@ const SpinnerCss = styled(Spinner)`
   }
 `;
 
+const basicStyle = css`
+  color: #353a5d;
+  background: white;
+  border: 1px solid #353a5d;
+  margin-right: 1rem;
+`;
+
 const Button = styled.button`
+  ${(p) => (!p.className ? basicStyle : "")}
+  color: #353a5d;
+  background: white;
+  border: 1px solid #353a5d;
   position: relative;
   min-width: 125px;
   min-height: 40px;

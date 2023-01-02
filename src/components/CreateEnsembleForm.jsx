@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../components/Button";
+import GenericButton from "../components/GenericButton";
 
 function CreateEnsembleForm(props) {
   const { createEnsemble, setVisible, onChange, errors } = props;
@@ -62,6 +62,7 @@ const Close = styled.div`
 
 const Form = styled.form`
   width: 40%;
+  z-index: 2;
   padding: 4rem;
   display: flex;
   flex-direction: column;
@@ -76,7 +77,7 @@ const Form = styled.form`
   }
 `;
 
-const ButtonCss = styled(Button)`
+const ButtonCss = styled(GenericButton)`
   padding: 1rem 3rem;
   font-size: 1.5rem;
 `;

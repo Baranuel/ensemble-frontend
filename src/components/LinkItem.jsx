@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 function LinkItem(props) {
-  return <LinkCss to={`${props.path}`}>{props.name}</LinkCss>;
+  return (
+    <LinkCss className={props.className} to={`${props.path}`}>
+      {props.name}
+    </LinkCss>
+  );
 }
 
 export default LinkItem;
