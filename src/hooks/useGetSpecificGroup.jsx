@@ -4,9 +4,10 @@ import { AuthContext } from "../context/AuthContextProvider";
 function useGetSpecificGroup(_id) {
   const { access_token } = useContext(AuthContext);
   const [specificEnsemble, setSpecificEnsemble] = useState();
+
   useEffect(() => {
     GetSpecificEnsemble();
-  }, []);
+  }, [specificEnsemble]);
 
   const GetSpecificEnsemble = async () => {
     try {
@@ -20,13 +21,12 @@ function useGetSpecificGroup(_id) {
         }
       );
       const data = await response.json();
-      console.log(data);
       setSpecificEnsemble(data);
     } catch (err) {
       console.log(err);
     }
   };
-  return { specificEnsemble };
+  return { specificEnsemble, setSpecificEnsemble };
 }
 
 export default useGetSpecificGroup;

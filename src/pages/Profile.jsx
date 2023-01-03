@@ -17,9 +17,7 @@ function Profile() {
   const [visible, setVisible] = useState();
   const [createEnsembleData, setCreateEnsembleData] = useState();
 
-  const userContext = useContext(AuthContext);
-
-  const { access_token, loading } = userContext;
+  const { access_token, loading } = useContext(AuthContext);
 
   const createEnsemble = async (e) => {
     e.preventDefault();
@@ -51,6 +49,8 @@ function Profile() {
   };
 
   const handleChange = (event) => {
+    //we are dynamically creating object property for every field we have in the form.
+    //we are setting each input in the state so we can send it to the server at once.
     setCreateEnsembleData((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
@@ -58,7 +58,11 @@ function Profile() {
   };
 
   const populate = () => {
+    //check if we have created any ensembles if not do nothing
     if (!createdEnsembles) return;
+
+    // we are mapping over each ensemble and creating a component "Ensemble"
+    //then we are returning it so we can see it on the page when we call this function | CHECK LINE 123 |
 
     return createdEnsembles.map((e, ix) => {
       return <Ensemble key={ix + "key"} ensemble={e} user={user} />;
@@ -112,7 +116,6 @@ function Profile() {
         <CreatedGroups>
           <h2>Ensambles you have created</h2>
           <Groups>
-            {" "}
             {!createdEnsembles || createdEnsembles.length <= 0
               ? "You have not created any Ensembles"
               : populate()}
@@ -125,14 +128,6 @@ function Profile() {
 
 export default Profile;
 
-const StyledDiv = styled.div`
-  background: green;
-
-  h1 {
-    background: red;
-    width: 50%;
-  }
-`;
 const PrimaryButton = styled(GenericButton)`
   background: #353a5d;
   color: white;

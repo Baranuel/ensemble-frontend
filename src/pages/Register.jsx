@@ -7,17 +7,19 @@ function Register() {
   const [value, setValue] = useState({});
   const [user, setUser] = useState(undefined);
   const [errors, setErrors] = useState(undefined);
+  const navigate = useNavigate();
 
-  const userContext = useContext(AuthContext);
-  const { login, isLoggedIn, loading, setLoading, access_token } = userContext;
+  //getting all the variables from our custom hook
+  const { login, setLoading } = useContext(AuthContext);
 
+  //dynamically setting the values for each input we have.
+  //storing it locally in state so we can send the whole form at once.
   function handleChange(event) {
     setValue((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
     }));
   }
-  const navigate = useNavigate();
 
   async function sendData(e) {
     e.preventDefault();
@@ -31,8 +33,10 @@ function Register() {
     })
       .then((response) => response.json())
       .then((data) => {
+        //if the response status is not "created" then we store the errors in local state and show them.
         if (data.statusCode !== 201) return setErrors(data.message);
         setErrors(false);
+        //if we create a user successfully then we get the token for them and log them in.
         return login(data.access_token);
       })
       .then(() => navigate("/profile"))
@@ -40,8 +44,6 @@ function Register() {
         console.error("Error:", error);
       });
   }
-
-  console.log(errors);
 
   return (
     <RegisterPage>

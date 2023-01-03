@@ -5,11 +5,12 @@ import { AuthContext } from "../context/AuthContextProvider";
 
 function Login() {
   const [loginForm, setLoginForm] = useState();
-  const userContext = useContext(AuthContext);
-  const { loading, setLoading } = userContext;
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
+    //dynamically creating object properties based on each input we have.
+    //saving it in local state so we can send it ot the backend.
     setLoginForm((prev) => ({
       ...prev,
       [event.target.name]: event.target.value,
@@ -28,7 +29,9 @@ function Login() {
         body: JSON.stringify(loginForm),
       });
       const data = await response.json();
-      await userContext.login(data.access_token);
+      //here we receive logged in user with access token, we send to "login" function in our hook
+      // the function sets the access token into Local storage for us.
+      await login(data.access_token);
       navigate("/profile");
     } catch (error) {
       console.error("Error:", error);

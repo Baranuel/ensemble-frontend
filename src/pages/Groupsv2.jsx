@@ -8,15 +8,16 @@ import styled from "styled-components";
 import Spinner from "../components/Spinner";
 
 function Groupsv2() {
-  // console.log(useGetEnsembles());
-  // const { allEnsembles } = useGetEnsembles();
-
+  //we're getting all the data from our custom hooks
   const { user } = useGetUser();
   const { allEnsembles, refetchData, setAllEnsembles, isLoading } =
     useGetAllEnsembles();
+
   const populate = () => {
+    //here we are checking if we have any ensembles if not return and do nothing
     if (!allEnsembles) return;
 
+    // if we have ensembles then map over them and return Ensemble Component so we can see it on the page.
     return allEnsembles.map((e, ix) => {
       return (
         <Ensemble
@@ -32,7 +33,14 @@ function Groupsv2() {
 
   return (
     <GroupsPage>
-      <Div>{isLoading ? <SpinnerCss className /> : populate()}</Div>
+      {allEnsembles < 1 ? (
+        <Div>
+          Wow There is Absolutely nothing, go to your profile and create some
+          ensembles
+        </Div>
+      ) : (
+        <Div>{isLoading ? <SpinnerCss className /> : populate()}</Div>
+      )}
     </GroupsPage>
   );
 }

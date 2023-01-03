@@ -3,12 +3,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContextProvider";
 
 function useGetAllEnsembles() {
-  const userContext = useContext(AuthContext);
-  const { access_token } = userContext;
+  const { access_token } = useContext(AuthContext);
   const [allEnsembles, setAllEnsembles] = useState();
   const [loading, setLoading] = useState();
 
   const isLoading = loading;
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -42,6 +42,7 @@ function useGetAllEnsembles() {
       });
   };
 
+  //basically we are doing all
   return { allEnsembles, setAllEnsembles, refetchData, isLoading };
 }
 

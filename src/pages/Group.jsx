@@ -4,10 +4,59 @@ import styled from "styled-components";
 import useGetSpecificGroup from "../hooks/useGetSpecificGroup";
 import CreatorLabel from "../components/CreatorLabel";
 import GenericButton from "../components/GenericButton";
+import { AuthContext } from "../context/AuthContextProvider";
+import useGetUser from "../hooks/useGetUser";
 
 function Group() {
+  const { user } = useGetUser();
+  const { access_token } = useContext(AuthContext);
+  //we get the id of the ensemble from url by using this hook
   const { _id } = useParams();
-  const { specificEnsemble } = useGetSpecificGroup(_id);
+
+  //we pass the id into our custom hook so we can get a specific ensemble based on the Id and show it.
+  const { specificEnsemble, setSpecificEnsemble } = useGetSpecificGroup(_id);
+
+  const userIsMember = () => {
+    return specificEnsemble.members.find(
+      (member) => member.email === user.email
+    )
+      ? true
+      : false;
+  };
+
+  const handleJoinEnsemble = async () => {
+    const response = await fetch("http://localhost:3000/ensemble/addMember", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        ensembleId: specificEnsemble._id,
+        userId: user._id,
+      }),
+    });
+    const data = await response.json();
+    setSpecificEnsemble((prev) => ({
+      ...prev,
+      data,
+    }));
+  };
+
+  const populateMembers = () => {
+    if (!specificEnsemble) return;
+
+    return specificEnsemble.members.map((member) => {
+      return (
+        <CreatorLabel
+          image="https://i.pravatar.cc/300"
+          email={member.email}
+          phone="(123) 456-7890"
+          name={member.username}
+        />
+      );
+    });
+  };
 
   return (
     <GroupPage>
@@ -55,37 +104,24 @@ function Group() {
               </p>
             </Info>
             <ButtonCss className="className" text="Contact Creator" />
+            {!userIsMember() && (
+              <ButtonCss
+                onClick={() => handleJoinEnsemble()}
+                className="className"
+                text="Join Ensemble"
+              />
+            )}
           </GroupCss>
           <MembersCss>
             <CreatorCss>
               <CreatorLabel
                 image="https://i.pravatar.cc/300"
-                email="johndoe@example.com"
+                email={specificEnsemble.creator.email}
                 phone="(123) 456-7890"
                 name={specificEnsemble.creator.username}
               />
             </CreatorCss>
-            <MemberCss>
-              {" "}
-              <CreatorLabel
-                image="https://i.pravatar.cc/300"
-                email="johndoe@example.com"
-                phone="(123) 456-7890"
-                name="John Doe"
-              />
-              <CreatorLabel
-                image="https://i.pravatar.cc/300"
-                email="johndoe@example.com"
-                phone="(123) 456-7890"
-                name="John Doe"
-              />
-              <CreatorLabel
-                image="https://i.pravatar.cc/300"
-                email="johndoe@example.com"
-                phone="(123) 456-7890"
-                name={specificEnsemble.creator.username}
-              />
-            </MemberCss>
+            <MemberCss> {populateMembers()}</MemberCss>
           </MembersCss>
         </Wrapper>
       )}
@@ -97,6 +133,7 @@ export default Group;
 
 const ButtonCss = styled(GenericButton)`
   margin-top: 1rem;
+  margin-right: 1rem;
   font-size: 1.2rem;
   background: #bf1e2f;
   color: white;
@@ -111,6 +148,7 @@ const CreatorCss = styled.div`
 `;
 
 const MemberCss = styled.div`
+  overflow-y: scroll;
   height: 100%;
   border-radius: 10px;
   background: #efeded;
@@ -144,7 +182,8 @@ const Img = styled.img`
   background: blue;
 `;
 const MembersCss = styled.div`
-  width: 30%;
+  min-width: 30%;
+
   display: flex;
   flex-direction: column;
   gap: 1rem;

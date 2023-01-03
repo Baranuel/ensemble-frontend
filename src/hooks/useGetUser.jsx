@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function useGetUser() {
   const navigate = useNavigate();
-  const userContext = useContext(AuthContext);
-  const { access_token } = userContext;
+  const { access_token } = useContext(AuthContext);
 
   const [user, setUser] = useState();
 
@@ -22,7 +21,6 @@ function useGetUser() {
           return data.json();
         })
         .then((data) => {
-          console.log(data);
           setUser(data.user);
         });
     } catch (err) {

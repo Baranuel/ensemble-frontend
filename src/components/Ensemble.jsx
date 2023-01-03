@@ -118,7 +118,12 @@ function Ensemble(props) {
             Member
           </IsMember>
         )}
-        {isUserCreator() && <AdminCss color="white" />}
+        {isUserCreator() && (
+          <IsCreator>
+            <AdminCss color="white" />
+            Creator
+          </IsCreator>
+        )}
       </BottomBanner>
     </EnsembleCard>
   );
@@ -141,7 +146,13 @@ const ButtonCss = styled(GenericButton)`
 const SpanCss = styled.span`
   font-weight: 700;
 `;
-
+const IsCreator = styled.h3`
+  color: white;
+  margin-left: 0.25rem;
+  font-family: Montserrat;
+  font-size: 0.85rem;
+  font-weight: 700;
+`;
 const IsMember = styled.h3`
   color: #56a4e8;
   font-family: Montserrat;
